@@ -1,0 +1,63 @@
+============================================
+AQRS FX Pro V3 - ALL RUN COMMANDS
+============================================
+
+1. LIVE TRADING (Real-time):
+   cd "c:\DEMO SYS\aqrs_fx_pro_v3"
+   python main.py
+
+2. BACKTEST ALL 5 PAIRS:
+   cd "c:\DEMO SYS\aqrs_fx_pro_v3"
+   python backtest/run.py --symbols EURUSD GBPUSD USDJPY USDCHF USDZAR --balance 10000
+
+3. BACKTEST SINGLE PAIR:
+   cd "c:\DEMO SYS\aqrs_fx_pro_v3"
+   python backtest/run.py --symbols EURUSD --balance 10000
+
+4. VIEW RECENT TRADES:
+   cd "c:\DEMO SYS\aqrs_fx_pro_v3"
+   python show_trades.py
+
+5. MONITOR LIVE LOGS (Last 50 lines):
+   Get-Content "c:\DEMO SYS\aqrs_fx_pro_v3\logs\system.log" -Tail 50
+
+6. FOLLOW LIVE LOGS IN REAL-TIME:
+   Get-Content "c:\DEMO SYS\aqrs_fx_pro_v3\logs\system.log" -Tail 50 -Wait
+
+7. CHECK SYSTEM STATUS:
+   cd "c:\DEMO SYS\aqrs_fx_pro_v3"
+   python -c "from core.engine import AQRSFX; print('✅ System Ready')"
+
+============================================
+QUICK START
+============================================
+
+Option A: GUI Menu (Windows only)
+- Double-click: run.bat
+- Select option from menu
+
+Option B: Terminal Commands (PowerShell/CMD)
+- Copy and paste any command above
+
+Option C: Auto Start (for 24/7 trading)
+- Use Windows Task Scheduler to run: python main.py
+
+============================================
+SUPPORTED FOREX PAIRS (5)
+============================================
+
+1. EURUSD
+2. GBPUSD
+3. USDJPY
+4. USDCHF
+5. USDZAR
+
+============================================
+FILES
+============================================
+
+Commands:        RUN_COMMANDS.md (detailed)
+GUI Menu:        run.bat (easy clicking)
+Config:          core/config.py (settings)
+Logs:            logs/system.log (live output)
+Results:         backtest_results.csv (after backtest)

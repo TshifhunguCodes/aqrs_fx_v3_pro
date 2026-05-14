@@ -1,0 +1,270 @@
+2026-05-14 14:57:04,445 - INFO - ============================================================
+2026-05-14 14:57:04,445 - INFO - AQRS FX Pro V3 — Starting
+2026-05-14 14:57:04,446 - INFO - ============================================================
+2026-05-14 14:57:04,447 - INFO - Signal loop started
+2026-05-14 14:57:04,447 - INFO - Thread started: signal
+2026-05-14 14:57:04,490 - INFO - \u2501\u2501 EURUSD | session=OFF_HOURS
+2026-05-14 14:57:04,491 - INFO - Risk loop started
+2026-05-14 14:57:04,491 - INFO - Thread started: risk
+2026-05-14 14:57:04,491 - INFO - EURUSD skipped — off-hours
+2026-05-14 14:57:04,492 - INFO - \u2501\u2501 GBPUSD | session=OFF_HOURS
+2026-05-14 14:57:04,492 - INFO - Journal loop started
+2026-05-14 14:57:04,492 - INFO - GBPUSD skipped — off-hours
+2026-05-14 14:57:04,492 - INFO - Thread started: journal
+2026-05-14 14:57:04,496 - INFO - \u2501\u2501 USDJPY | session=OFF_HOURS
+2026-05-14 14:57:04,497 - INFO - USDJPY skipped — off-hours
+2026-05-14 14:57:04,497 - INFO - \u2501\u2501 USDCHF | session=OFF_HOURS
+2026-05-14 14:57:04,497 - INFO - USDCHF skipped — off-hours
+2026-05-14 14:57:04,497 - INFO - ML loop started
+2026-05-14 14:57:04,497 - INFO - \u2501\u2501 USDZAR | session=OFF_HOURS
+2026-05-14 14:57:04,497 - INFO - Thread started: ml
+2026-05-14 14:57:04,497 - INFO - USDZAR skipped — off-hours
+2026-05-14 14:57:04,497 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 14:57:04,497 - INFO - \u2501\u2501 US30.cash | session=OFF_HOURS
+2026-05-14 14:57:04,497 - INFO - US30.cash skipped — off-hours
+2026-05-14 14:57:04,497 - INFO - \u2501\u2501 NAS100.cash | session=OFF_HOURS
+2026-05-14 14:57:04,497 - INFO - NAS100.cash skipped — off-hours
+2026-05-14 14:57:34,529 - INFO - \u2501\u2501 EURUSD | session=OFF_HOURS
+2026-05-14 14:57:34,530 - INFO - EURUSD skipped — off-hours
+2026-05-14 14:57:34,530 - INFO - \u2501\u2501 GBPUSD | session=OFF_HOURS
+2026-05-14 14:57:34,530 - INFO - GBPUSD skipped — off-hours
+2026-05-14 14:57:34,530 - INFO - \u2501\u2501 USDJPY | session=OFF_HOURS
+2026-05-14 14:57:34,530 - INFO - USDJPY skipped — off-hours
+2026-05-14 14:57:34,530 - INFO - \u2501\u2501 USDCHF | session=OFF_HOURS
+2026-05-14 14:57:34,530 - INFO - USDCHF skipped — off-hours
+2026-05-14 14:57:34,530 - INFO - \u2501\u2501 USDZAR | session=OFF_HOURS
+2026-05-14 14:57:34,530 - INFO - USDZAR skipped — off-hours
+2026-05-14 14:57:34,531 - INFO - \u2501\u2501 US30.cash | session=OFF_HOURS
+2026-05-14 14:57:34,531 - INFO - US30.cash skipped — off-hours
+2026-05-14 14:57:34,531 - INFO - \u2501\u2501 NAS100.cash | session=OFF_HOURS
+2026-05-14 14:57:34,531 - INFO - NAS100.cash skipped — off-hours
+2026-05-14 14:58:04,498 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 14:58:04,550 - INFO - \u2501\u2501 EURUSD | session=OFF_HOURS
+2026-05-14 14:58:04,550 - INFO - EURUSD skipped — off-hours
+2026-05-14 14:58:04,550 - INFO - \u2501\u2501 GBPUSD | session=OFF_HOURS
+2026-05-14 14:58:04,550 - INFO - GBPUSD skipped — off-hours
+2026-05-14 14:58:04,550 - INFO - \u2501\u2501 USDJPY | session=OFF_HOURS
+2026-05-14 14:58:04,550 - INFO - USDJPY skipped — off-hours
+2026-05-14 14:58:04,550 - INFO - \u2501\u2501 USDCHF | session=OFF_HOURS
+2026-05-14 14:58:04,551 - INFO - USDCHF skipped — off-hours
+2026-05-14 14:58:04,551 - INFO - \u2501\u2501 USDZAR | session=OFF_HOURS
+2026-05-14 14:58:04,551 - INFO - USDZAR skipped — off-hours
+2026-05-14 14:58:04,551 - INFO - \u2501\u2501 US30.cash | session=OFF_HOURS
+2026-05-14 14:58:04,551 - INFO - US30.cash skipped — off-hours
+2026-05-14 14:58:04,551 - INFO - \u2501\u2501 NAS100.cash | session=OFF_HOURS
+2026-05-14 14:58:04,551 - INFO - NAS100.cash skipped — off-hours
+2026-05-14 17:20:13,491 - INFO - ============================================================
+2026-05-14 17:20:13,492 - INFO - AQRS FX Pro V3 — Starting
+2026-05-14 17:20:13,493 - INFO - ============================================================
+2026-05-14 17:20:13,495 - INFO - Signal loop started
+2026-05-14 17:20:13,495 - INFO - Thread started: signal
+2026-05-14 17:20:13,601 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:20:13,709 - INFO - Risk loop started
+2026-05-14 17:20:13,711 - INFO - Thread started: risk
+2026-05-14 17:20:13,713 - INFO - Journal loop started
+2026-05-14 17:20:13,719 - INFO - Thread started: journal
+2026-05-14 17:20:13,720 - INFO - ML loop started
+2026-05-14 17:20:13,721 - INFO - Thread started: ml
+2026-05-14 17:20:13,722 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 17:20:15,733 - INFO - EURUSD no candle confirmation
+2026-05-14 17:20:15,734 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:20:15,911 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:20:15,912 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:20:15,913 - WARNING - USDJPY spread 29.99999999985903 too high
+2026-05-14 17:20:15,913 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:20:16,147 - INFO - USDCHF no candle confirmation
+2026-05-14 17:20:16,147 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:20:16,435 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:20:16,436 - INFO - \u2501\u2501 US30.cash | session=NY_AM
+2026-05-14 17:20:16,437 - ERROR - US30.cash error: 'NoneType' object has no attribute 'ask'
+Traceback (most recent call last):
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 241, in run
+    self.process_pair(symbol)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 67, in process_pair
+    spread = get_spread(symbol)
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\market\spread.py", line 8, in get_spread
+    spread = abs(tick.ask - tick.bid)
+                 ^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'ask'
+2026-05-14 17:20:16,446 - INFO - \u2501\u2501 NAS100.cash | session=NY_AM
+2026-05-14 17:20:16,447 - ERROR - NAS100.cash error: 'NoneType' object has no attribute 'ask'
+Traceback (most recent call last):
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 241, in run
+    self.process_pair(symbol)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 67, in process_pair
+    spread = get_spread(symbol)
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\market\spread.py", line 8, in get_spread
+    spread = abs(tick.ask - tick.bid)
+                 ^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'ask'
+2026-05-14 17:28:12,566 - INFO - ============================================================
+2026-05-14 17:28:12,567 - INFO - AQRS FX Pro V3 — Starting
+2026-05-14 17:28:12,567 - INFO - ============================================================
+2026-05-14 17:28:12,569 - INFO - Signal loop started
+2026-05-14 17:28:12,597 - INFO - Thread started: signal
+2026-05-14 17:28:12,597 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:28:12,604 - INFO - Risk loop started
+2026-05-14 17:28:12,604 - INFO - Thread started: risk
+2026-05-14 17:28:12,605 - INFO - Journal loop started
+2026-05-14 17:28:12,608 - INFO - Thread started: journal
+2026-05-14 17:28:12,609 - INFO - ML loop started
+2026-05-14 17:28:12,609 - INFO - Thread started: ml
+2026-05-14 17:28:12,609 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 17:28:13,544 - INFO - EURUSD no candle confirmation
+2026-05-14 17:28:13,544 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:28:13,622 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:28:13,622 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:28:13,623 - WARNING - USDJPY spread 30.000000000143245 too high
+2026-05-14 17:28:13,623 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:28:13,689 - INFO - USDCHF no candle confirmation
+2026-05-14 17:28:13,689 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:28:13,746 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:28:13,746 - INFO - \u2501\u2501 US30.cash | session=NY_AM
+2026-05-14 17:28:13,746 - ERROR - US30.cash error: 'NoneType' object has no attribute 'ask'
+Traceback (most recent call last):
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 241, in run
+    self.process_pair(symbol)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 67, in process_pair
+    spread = get_spread(symbol)
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\market\spread.py", line 8, in get_spread
+    spread = abs(tick.ask - tick.bid)
+                 ^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'ask'
+2026-05-14 17:28:13,753 - INFO - \u2501\u2501 NAS100.cash | session=NY_AM
+2026-05-14 17:28:13,754 - ERROR - NAS100.cash error: 'NoneType' object has no attribute 'ask'
+Traceback (most recent call last):
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 241, in run
+    self.process_pair(symbol)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\core\engine.py", line 67, in process_pair
+    spread = get_spread(symbol)
+  File "C:\DEMO SYS\aqrs_fx_pro_v3\market\spread.py", line 8, in get_spread
+    spread = abs(tick.ask - tick.bid)
+                 ^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'ask'
+2026-05-14 17:37:37,553 - INFO - ============================================================
+2026-05-14 17:37:37,554 - INFO - AQRS FX Pro V3 — Starting
+2026-05-14 17:37:37,554 - INFO - ============================================================
+2026-05-14 17:37:37,555 - INFO - Signal loop started
+2026-05-14 17:37:37,555 - INFO - Thread started: signal
+2026-05-14 17:37:37,578 - INFO - Risk loop started
+2026-05-14 17:37:37,578 - INFO - Thread started: risk
+2026-05-14 17:37:37,579 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:37:37,579 - INFO - Journal loop started
+2026-05-14 17:37:37,579 - INFO - Thread started: journal
+2026-05-14 17:37:37,579 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:37:37,586 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:37:37,590 - INFO - ML loop started
+2026-05-14 17:37:37,590 - WARNING - USDJPY spread 29.99999999985903 too high
+2026-05-14 17:37:37,590 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:37:37,590 - INFO - Thread started: ml
+2026-05-14 17:37:37,593 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 17:37:37,591 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:37:38,508 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:37:38,516 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:37:38,521 - INFO - EURUSD no candle confirmation
+2026-05-14 17:37:38,523 - INFO - USDCHF no candle confirmation
+2026-05-14 17:38:08,717 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:38:08,749 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:38:08,790 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:38:08,792 - WARNING - USDJPY spread 30.000000000143245 too high
+2026-05-14 17:38:08,794 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:38:08,814 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:38:09,147 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:38:09,153 - INFO - EURUSD no candle confirmation
+2026-05-14 17:38:09,156 - INFO - USDCHF no candle confirmation
+2026-05-14 17:38:09,157 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:38:37,605 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 17:38:37,771 - INFO - ============================================================
+2026-05-14 17:38:37,771 - INFO - AQRS FX Pro V3 — Starting
+2026-05-14 17:38:37,771 - INFO - ============================================================
+2026-05-14 17:38:37,772 - INFO - Signal loop started
+2026-05-14 17:38:37,772 - INFO - Thread started: signal
+2026-05-14 17:38:37,803 - INFO - Risk loop started
+2026-05-14 17:38:37,804 - INFO - Thread started: risk
+2026-05-14 17:38:37,804 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:38:37,809 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:38:37,814 - INFO - Journal loop started
+2026-05-14 17:38:37,816 - INFO - Thread started: journal
+2026-05-14 17:38:37,818 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:38:37,819 - WARNING - USDJPY spread 30.000000000143245 too high
+2026-05-14 17:38:37,819 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:38:37,820 - INFO - ML loop started
+2026-05-14 17:38:37,820 - INFO - Thread started: ml
+2026-05-14 17:38:37,828 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:38:37,828 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 17:38:39,210 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:38:39,232 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:38:39,263 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:38:39,272 - WARNING - USDJPY spread 30.000000000143245 too high
+2026-05-14 17:38:39,280 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:38:39,296 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:38:39,312 - INFO - USDCHF no candle confirmation
+2026-05-14 17:38:39,391 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:38:39,429 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:38:39,430 - INFO - EURUSD | dir=SELL | score=122 | regime=ALIGNED_TREND | lifecycle=TREND_HEALTHY | vp=BELOW_VAL | pd=DISCOUNT | mtf=True
+2026-05-14 17:38:39,431 - INFO - AdaptiveGate | dir=SELL | ml_regime=UNTRAINED | regime_delta=+0 | rl=NO_HISTORY_YET | approved=True
+2026-05-14 17:38:39,435 - INFO - Trade logged: EURUSD SELL @ 1.16777
+2026-05-14 17:38:39,435 - INFO - EURUSD \u2705 order sent | vol=0.01 | rr=3.0 | OrderSendResult(retcode=10027, deal=0, order=0, volume=0.0, price=0.0, bid=0.0, ask=0.0, comment='AutoTrading disabled by client', request_id=0, retcode_external=0, request=TradeRequest(action=1, magic=777, order=0, symbol='EURUSD', volume=0.01, price=1.16777, stoplimit=0.0, sl=1.16831, tp=1.16614, deviation=20, type=1, type_filling=1, type_time=0, expiration=0, comment='AQRS_FX_PRO', position=0, position_by=0))
+2026-05-14 17:38:39,629 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:38:39,638 - INFO - USDCHF no candle confirmation
+2026-05-14 17:38:39,746 - INFO - EURUSD | dir=SELL | score=122 | regime=ALIGNED_TREND | lifecycle=TREND_HEALTHY | vp=BELOW_VAL | pd=DISCOUNT | mtf=True
+2026-05-14 17:38:39,748 - INFO - AdaptiveGate | dir=SELL | ml_regime=UNTRAINED | regime_delta=+0 | rl=NO_HISTORY_YET | approved=True
+2026-05-14 17:38:39,761 - INFO - Trade logged: EURUSD SELL @ 1.16777
+2026-05-14 17:38:39,761 - INFO - EURUSD \u2705 order sent | vol=0.01 | rr=3.0 | OrderSendResult(retcode=10027, deal=0, order=0, volume=0.0, price=0.0, bid=0.0, ask=0.0, comment='AutoTrading disabled by client', request_id=0, retcode_external=0, request=TradeRequest(action=1, magic=777, order=0, symbol='EURUSD', volume=0.01, price=1.16777, stoplimit=0.0, sl=1.16831, tp=1.16614, deviation=20, type=1, type_filling=1, type_time=0, expiration=0, comment='AQRS_FX_PRO', position=0, position_by=0))
+2026-05-14 17:38:39,763 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:39:09,460 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:39:09,474 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:39:09,491 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:39:09,491 - WARNING - USDJPY spread 29.99999999985903 too high
+2026-05-14 17:39:09,503 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:39:09,514 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:39:09,823 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:39:09,831 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:39:09,869 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:39:09,869 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:39:09,872 - INFO - USDCHF no candle confirmation
+2026-05-14 17:39:09,879 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:39:09,885 - INFO - EURUSD no candle confirmation
+2026-05-14 17:39:09,909 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:39:09,926 - WARNING - USDJPY spread 29.99999999985903 too high
+2026-05-14 17:39:09,945 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:39:10,194 - INFO - EURUSD no candle confirmation
+2026-05-14 17:39:10,223 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:39:10,239 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:39:10,244 - INFO - USDCHF no candle confirmation
+2026-05-14 17:39:37,619 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 17:39:37,835 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-14 17:39:39,915 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:39:39,922 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:39:39,928 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:39:39,931 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:39:39,931 - WARNING - USDJPY spread 29.99999999985903 too high
+2026-05-14 17:39:39,940 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:39:40,203 - INFO - EURUSD no candle confirmation
+2026-05-14 17:39:40,214 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:39:40,217 - INFO - USDCHF no candle confirmation
+2026-05-14 17:39:40,220 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:39:40,278 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:39:40,282 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:39:40,290 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:39:40,301 - WARNING - USDJPY spread 29.99999999985903 too high
+2026-05-14 17:39:40,301 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:39:40,305 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:39:40,504 - INFO - USDZAR H1 in range — skipping
+2026-05-14 17:39:40,504 - INFO - USDCHF no candle confirmation
+2026-05-14 17:39:40,506 - INFO - EURUSD no candle confirmation
+2026-05-14 17:39:40,507 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:40:10,549 - INFO - \u2501\u2501 EURUSD | session=NY_AM
+2026-05-14 17:40:10,557 - INFO - \u2501\u2501 GBPUSD | session=NY_AM
+2026-05-14 17:40:10,562 - INFO - \u2501\u2501 USDJPY | session=NY_AM
+2026-05-14 17:40:10,564 - WARNING - USDJPY spread 29.99999999985903 too high
+2026-05-14 17:40:10,564 - INFO - \u2501\u2501 USDCHF | session=NY_AM
+2026-05-14 17:40:10,589 - INFO - \u2501\u2501 USDZAR | session=NY_AM
+2026-05-14 17:40:10,789 - INFO - USDCHF no candle confirmation
+2026-05-14 17:40:10,796 - INFO - EURUSD no candle confirmation
+2026-05-14 17:40:10,803 - INFO - GBPUSD no candle confirmation
+2026-05-14 17:40:10,809 - INFO - USDZAR H1 in range — skipping
