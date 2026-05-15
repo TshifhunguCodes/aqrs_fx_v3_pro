@@ -63,11 +63,17 @@ def calculate_score(data: dict) -> int:
             score += 10
 
     # ── FVG (10) + in zone (+5) ───────────────────────────────────────────────
-    if data.get("fvg"):       score += 10
+    fvg = data.get("fvg")
+    if fvg and ((direction == "BUY" and fvg == "BULLISH_FVG") or
+                (direction == "SELL" and fvg == "BEARISH_FVG")):
+        score += 10
     if data.get("price_in_fvg"): score += 5
 
     # ── OB (10) + in zone (+5) ────────────────────────────────────────────────
-    if data.get("ob"):        score += 10
+    ob = data.get("ob")
+    if ob and ((direction == "BUY" and ob == "BULLISH_OB") or
+               (direction == "SELL" and ob == "BEARISH_OB")):
+        score += 10
     if data.get("price_in_ob"):  score += 5
 
     # ── Candle confirm score (up to 35) ───────────────────────────────────────
@@ -76,13 +82,13 @@ def calculate_score(data: dict) -> int:
     # ── Inducement (+10) ──────────────────────────────────────────────────────
     if data.get("inducement"): score += 10
 
-    # ── Premium / Discount (±15) ──────────────────────────────────────────────
+    # ── Premium / Discount (±10) ─────────────────────────────────────────────
     pd_zone = data.get("premium_discount", "EQUILIBRIUM")
     if (direction == "BUY" and pd_zone == "DISCOUNT") or \
        (direction == "SELL" and pd_zone == "PREMIUM"):
         score += 10
     elif pd_zone != "EQUILIBRIUM":
-        score -= 15
+        score -= 5
 
     # ── Volume Profile (POC/VAH/VAL) ─────────────────────────────────────────
     vp_zone = data.get("vp_zone", "UNKNOWN")

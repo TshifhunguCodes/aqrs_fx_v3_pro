@@ -11,7 +11,7 @@ from market.spread import get_spread
 
 from strategy.htf_bias import get_bias
 from strategy.structure import classify_structure, premium_discount, detect_inducement
-from strategy.liquidity import liquidity_sweep
+from strategy.liquidity import liquidity_sweep, sweep_supports_direction
 from strategy.fvg import detect_fvg, detect_fvg_zones, price_in_fvg
 from strategy.order_blocks import detect_order_block, detect_ob_zones, price_in_ob
 from strategy.manipulation import manipulation_score
@@ -94,6 +94,12 @@ class AQRSFX:
 
         direction = "BUY" if bias == "BULLISH" else "SELL"
 
+        # Require trend strength
+        adx = df['adx'].iloc[-1]
+        if adx < 20:
+            logger.info(f"{symbol} ADX too low ({adx:.1f}) — skipping")
+            return
+
         # ── Candle confirmation (hard gate — fail fast) ───────────────────────
         candle_confirm = get_candle_confirmation(df, direction)
         if not candle_confirm["confirmed"]:
@@ -103,6 +109,9 @@ class AQRSFX:
         # ── Market structure ──────────────────────────────────────────────────
         structure = classify_structure(df)
         pd_zone   = premium_discount(structure["last_sh"], structure["last_sl"], current_price)
+        if structure["trend"] != "RANGE" and structure["trend"] != bias:
+            logger.info(f"{symbol} M5 structure={structure['trend']} conflicts with H1 bias={bias}")
+            return
 
         # ── Regime + Lifecycle ────────────────────────────────────────────────
         regime    = classify_regime(df, df_h1)
@@ -142,6 +151,10 @@ class AQRSFX:
         # ── MACD alignment ────────────────────────────────────────────────────
         macd_hist     = df.iloc[-1].get('macd_hist', 0)
         macd_aligned  = (macd_hist > 0 if direction == "BUY" else macd_hist < 0)
+        liquidity      = liquidity_sweep(df)
+        if liquidity and not sweep_supports_direction(liquidity, direction):
+            logger.info(f"{symbol} liquidity={liquidity} opposes {direction}")
+            return
 
         # ── Score ─────────────────────────────────────────────────────────────
         score_data = {
@@ -149,7 +162,7 @@ class AQRSFX:
             "structure_trend":    structure["trend"],
             "bos":                structure["bos"],
             "choch":              structure["choch"],
-            "liquidity":          liquidity_sweep(df),
+            "liquidity":          liquidity,
             "fvg":                fvg_signal,
             "ob":                 ob_signal,
             "price_in_fvg":       in_fvg,

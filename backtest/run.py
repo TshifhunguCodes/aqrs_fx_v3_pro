@@ -23,7 +23,7 @@ from market.candles import add_indicators, merge_htf_context
 
 from strategy.htf_bias import get_bias
 from strategy.structure import classify_structure, premium_discount, detect_inducement
-from strategy.liquidity import liquidity_sweep
+from strategy.liquidity import liquidity_sweep, sweep_supports_direction
 from strategy.fvg import detect_fvg, detect_fvg_zones, price_in_fvg
 from strategy.order_blocks import detect_order_block, detect_ob_zones, price_in_ob
 from strategy.manipulation import manipulation_score
@@ -160,15 +160,14 @@ def bt_lot_size(symbol, sl_dist_price, balance):
 
 
 def fetch_data(symbol):
-    """Fetch M5 and H1 data using copy_rates_from_pos (works on any broker)."""
+    """Fetch M5 and H1 data using copy_rates_from_pos with larger batch."""
     tf_map = {"M5": mt5.TIMEFRAME_M5, "H1": mt5.TIMEFRAME_H1}
 
     # Fetch max available bars in batches
-    m5_bars = []
-    h1_bars = []
-    batch_size = 1000  # Reduced for demo
+    batch_size = 50000  # Increased for more data
 
     rates = mt5.copy_rates_from_pos(symbol, tf_map["M5"], 0, batch_size)
+    m5_bars = None
     if rates is not None and len(rates) > 0:
         df = pd.DataFrame(rates)
         df['time'] = pd.to_datetime(df['time'], unit='s')
@@ -176,7 +175,8 @@ def fetch_data(symbol):
         m5_bars = df
         print(f"  M5: {len(df)} bars from {df['time'].iloc[0]} to {df['time'].iloc[-1]}")
 
-    rates = mt5.copy_rates_from_pos(symbol, tf_map["H1"], 0, batch_size)
+    rates = mt5.copy_rates_from_pos(symbol, tf_map["H1"], 0, batch_size // 12)  # Roughly match
+    h1_bars = None
     if rates is not None and len(rates) > 0:
         df = pd.DataFrame(rates)
         df['time'] = pd.to_datetime(df['time'], unit='s')
@@ -353,7 +353,7 @@ def run_backtest(symbols=None, balance=10000):
 
         # ── Fetch data ──────────────────────────────────────────────────────
         df_m5, df_h1 = fetch_data(symbol)
-        if len(df_m5) < 300 or len(df_h1) < 50:
+        if df_m5 is None or df_h1 is None or len(df_m5) < 300 or len(df_h1) < 50:
             print(f"  SKIP: insufficient data")
             continue
 
@@ -414,6 +414,11 @@ def run_backtest(symbols=None, balance=10000):
 
             direction = "BUY" if bias == "BULLISH" else "SELL"
 
+            # Require trend strength
+            adx = df_context['adx'].iloc[-1]
+            if adx < 15:
+                continue
+
             # ── Candle confirmation ─────────────────────────────────────────
             candle_confirm = get_candle_confirmation(df_context, direction)
             if not candle_confirm["confirmed"]:
@@ -422,6 +427,8 @@ def run_backtest(symbols=None, balance=10000):
             # ── Structure ───────────────────────────────────────────────────
             structure = classify_structure(df_context)
             pd_zone = premium_discount(structure["last_sh"], structure["last_sl"], current_price)
+            if structure["trend"] != "RANGE" and structure["trend"] != bias:
+                continue
 
             # ── Regime + Lifecycle ──────────────────────────────────────────
             regime = classify_regime(df_context, h1_slice)
@@ -458,6 +465,9 @@ def run_backtest(symbols=None, balance=10000):
 
             macd_hist = last_row.get('macd_hist', 0)
             macd_aligned = (macd_hist > 0 if direction == "BUY" else macd_hist < 0)
+            liquidity = liquidity_sweep(df_context)
+            if liquidity and not sweep_supports_direction(liquidity, direction):
+                continue
 
             # ── Score ───────────────────────────────────────────────────────
             score_data = {
@@ -465,7 +475,7 @@ def run_backtest(symbols=None, balance=10000):
                 "structure_trend": structure["trend"],
                 "bos": structure["bos"],
                 "choch": structure["choch"],
-                "liquidity": liquidity_sweep(df_context),
+                "liquidity": liquidity,
                 "fvg": fvg_signal,
                 "ob": ob_signal,
                 "price_in_fvg": in_fvg,
@@ -487,7 +497,7 @@ def run_backtest(symbols=None, balance=10000):
             }
 
             score = calculate_score(score_data)
-            if score < 75:
+            if score < 50:
                 continue
 
             # ── ML gate ─────────────────────────────────────────────────────

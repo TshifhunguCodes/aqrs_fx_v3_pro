@@ -1,80 +1,98 @@
 """
-Order Blocks — Enhanced SMC
-Detects institutional OBs with mitigation check and body quality filter.
+Order block detection with displacement and mitigation checks.
 """
 
-
-def _body(c):
-    return abs(c['close'] - c['open'])
+import pandas as pd
 
 
-def _range(c):
-    return c['high'] - c['low']
+def _body(candle):
+    return abs(candle["close"] - candle["open"])
+
+
+def _range(candle):
+    return candle["high"] - candle["low"]
+
+
+def _is_bullish(candle):
+    return candle["close"] > candle["open"]
+
+
+def _is_bearish(candle):
+    return candle["close"] < candle["open"]
+
+
+def _fallback_atr(df):
+    atr = df["atr"].iloc[-1] if "atr" in df.columns else None
+    if atr is None or pd.isna(atr) or atr <= 0:
+        atr = (df["high"] - df["low"]).rolling(14).mean().iloc[-1]
+    return atr
 
 
 def detect_order_block(df):
-    """Legacy bool check — kept for backwards compat with scorer."""
-    candle = df.iloc[-2]
-    body = _body(candle)
-    rng = _range(candle)
-    return body > (rng * 0.6)
+    """Return the most recent directional OB impulse, if present."""
+    if df is None or len(df) < 3:
+        return None
+
+    setup = df.iloc[-2]
+    reaction = df.iloc[-1]
+    rng = _range(setup)
+    if rng <= 0 or _body(setup) <= rng * 0.55:
+        return None
+
+    if _is_bearish(setup) and _is_bullish(reaction):
+        return "BULLISH_OB"
+    if _is_bullish(setup) and _is_bearish(reaction):
+        return "BEARISH_OB"
+    return None
 
 
 def detect_ob_zones(df, lookback=60):
     """
-    Scans for institutional OBs:
-    - Last opposing candle before a strong displacement move
-    - OB must not have been fully mitigated (price closed through it)
-    Returns list of {'direction', 'top', 'bottom', 'index', 'strength'}
+    Return unmitigated institutional OB zones.
+    Bullish OB: bearish candle before bullish displacement.
+    Bearish OB: bullish candle before bearish displacement.
     """
     zones = []
+    if df is None or len(df) < 5:
+        return zones
+
+    atr = _fallback_atr(df)
+    if pd.isna(atr) or atr <= 0:
+        return zones
+
     data = df.iloc[-lookback:]
-    atr = df['atr'].iloc[-1]
-
     for i in range(1, len(data) - 2):
-        c = data.iloc[i]
-        c_next = data.iloc[i + 1]
+        candle = data.iloc[i]
+        next_candle = data.iloc[i + 1]
+        next_body = _body(next_candle)
 
-        body_c = _body(c)
-        body_next = _body(c_next)
+        bullish_displacement = _is_bullish(next_candle) and next_body > atr * 1.2
+        bearish_displacement = _is_bearish(next_candle) and next_body > atr * 1.2
 
-        # Displacement: next candle moves strongly in one direction
-        is_bullish_displacement = (
-            c_next['close'] > c_next['open']
-            and body_next > atr * 1.2
-        )
-        is_bearish_displacement = (
-            c_next['close'] < c_next['open']
-            and body_next > atr * 1.2
-        )
-
-        # Bullish OB: bearish candle before bullish displacement
-        if c['close'] < c['open'] and is_bullish_displacement:
+        if _is_bearish(candle) and bullish_displacement:
             zone = {
                 "direction": "BULLISH",
-                "bottom": c['low'],
-                "top": c['open'],       # OB is the body of the bearish candle
+                "bottom": candle["low"],
+                "top": candle["open"],
                 "index": i,
-                "strength": body_next / atr,
+                "strength": next_body / atr,
             }
-        # Bearish OB: bullish candle before bearish displacement
-        elif c['close'] > c['open'] and is_bearish_displacement:
+        elif _is_bullish(candle) and bearish_displacement:
             zone = {
                 "direction": "BEARISH",
-                "top": c['high'],
-                "bottom": c['open'],
+                "bottom": candle["open"],
+                "top": candle["high"],
                 "index": i,
-                "strength": body_next / atr,
+                "strength": next_body / atr,
             }
         else:
             continue
 
-        # Mitigation: price closed fully through the OB body
         subsequent = data.iloc[i + 2:]
         if zone["direction"] == "BULLISH":
-            mitigated = (subsequent['close'] < zone["bottom"]).any()
+            mitigated = (subsequent["close"] < zone["bottom"]).any()
         else:
-            mitigated = (subsequent['close'] > zone["top"]).any()
+            mitigated = (subsequent["close"] > zone["top"]).any()
 
         if not mitigated:
             zones.append(zone)
@@ -83,9 +101,9 @@ def detect_ob_zones(df, lookback=60):
 
 
 def price_in_ob(current_price, zones, direction):
-    for z in zones:
-        if z["direction"] != direction:
+    for zone in zones:
+        if zone["direction"] != direction:
             continue
-        if z["bottom"] <= current_price <= z["top"]:
+        if zone["bottom"] <= current_price <= zone["top"]:
             return True
     return False

@@ -14,14 +14,14 @@ def dynamic_sltp(entry: float, atr: float, direction: str,
     """
     # Base SL multiplier — tighten in choppy/volatile, widen in healthy trend
     sl_mult = {
-        "ALIGNED_TREND":   1.2,
-        "TREND_MISMATCH":  1.8,
-        "CHOPPY":          2.0,
-        "VOLATILE":        2.5,
-        "BREAKOUT":        1.3,
-        "MEAN_REVERTING":  1.5,
-        "UNKNOWN":         1.5,
-    }.get(regime, 1.5)
+        "ALIGNED_TREND":   1.5,
+        "TREND_MISMATCH":  2.0,
+        "CHOPPY":          2.5,
+        "VOLATILE":        3.0,
+        "BREAKOUT":        1.6,
+        "MEAN_REVERTING":  1.8,
+        "UNKNOWN":         1.8,
+    }.get(regime, 1.8)
 
     # Lifecycle modifier
     phase_mult = {
@@ -40,11 +40,9 @@ def dynamic_sltp(entry: float, atr: float, direction: str,
     if rr_override:
         rr = rr_override
     elif phase == "TREND_HEALTHY" and regime == "ALIGNED_TREND":
-        rr = 3.0
-    elif regime in ("CHOPPY", "VOLATILE"):
-        rr = 1.5
-    else:
         rr = 2.0
+    else:
+        rr = 1.5
 
     tp_dist = sl_dist * rr
     logic   = f"regime={regime} | phase={phase} | sl_mult={sl_mult:.1f}×ATR | rr={rr}"

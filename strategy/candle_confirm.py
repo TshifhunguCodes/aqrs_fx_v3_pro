@@ -37,6 +37,8 @@ def displacement_candle(df, direction):
     - Body > 1.5x ATR
     - Direction matches signal
     """
+    if df is None or len(df) < 1:
+        return False
     c = df.iloc[-1]
     atr = df['atr'].iloc[-1]
     body = _body(c)
@@ -58,6 +60,8 @@ def engulfing_candle(df, direction):
     """
     Current candle body fully engulfs previous candle body.
     """
+    if df is None or len(df) < 2:
+        return False
     prev = df.iloc[-2]
     curr = df.iloc[-1]
 
@@ -87,6 +91,8 @@ def rejection_candle(df, direction):
     Long wick rejecting price away — hammer (BUY) or shooting star (SELL).
     Wick must be >= 2x body and >= 60% of total range.
     """
+    if df is None or len(df) < 1:
+        return False
     c = df.iloc[-1]
     body = _body(c)
     rng = _range(c)
@@ -107,6 +113,8 @@ def inside_bar_breakout(df, direction):
     """
     Previous candle is an inside bar; current breaks out in signal direction.
     """
+    if df is None or len(df) < 3:
+        return False
     mother = df.iloc[-3]
     inside = df.iloc[-2]
     curr = df.iloc[-1]
@@ -126,19 +134,24 @@ def mitigation_reaction(df, direction):
     Checks if price tapped a zone (wick) but closed back away from it —
     the classic SMC mitigation confirmation.
     """
+    if df is None or len(df) < 2:
+        return False
     c = df.iloc[-1]
     prev = df.iloc[-2]
+    body = _body(c)
+    if body == 0:
+        return False
 
     if direction == "BUY":
         # Wick down (tested support) but closed bullish and above prev low
         return (
-            _lower_wick(c) > _body(c) * 1.5
+            _lower_wick(c) > body * 1.5
             and _is_bullish(c)
             and c['close'] > prev['close']
         )
     # Wick up (tested resistance) but closed bearish and below prev high
     return (
-        _upper_wick(c) > _body(c) * 1.5
+        _upper_wick(c) > body * 1.5
         and _is_bearish(c)
         and c['close'] < prev['close']
     )
