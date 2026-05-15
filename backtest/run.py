@@ -16,6 +16,11 @@ import MetaTrader5 as mt5
 import pandas as pd
 import numpy as np
 
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
+
 # ── Ensure project root is on path ──────────────────────────────────────────
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -28,7 +33,6 @@ from strategy.fvg import detect_fvg, detect_fvg_zones, price_in_fvg
 from strategy.order_blocks import detect_order_block, detect_ob_zones, price_in_ob
 from strategy.manipulation import manipulation_score
 from strategy.candle_confirm import get_candle_confirmation
-from strategy.session import current_session, is_valid_session
 from strategy.scoring import calculate_score
 
 from regime.volume_profile import build_volume_profile, vp_zone, vp_near_poc
@@ -40,7 +44,10 @@ from intelligence.rl_agent import rl_approve
 from risk.dynamic_exit import dynamic_sltp
 
 from core.config import (
-    MAX_OPEN_TRADES, MAX_DAILY_DRAWDOWN, PAIR_RISK
+    MAX_OPEN_TRADES, MAX_DAILY_DRAWDOWN, PAIR_RISK,
+    PAIR_MIN_ADX, PAIR_MIN_SCORE,
+    PAIR_REQUIRE_PD_ALIGNMENT, PAIR_REQUIRE_ZONE_OR_SWEEP,
+    SYMBOLS
 )
 from core.logger import logger
 
@@ -50,6 +57,32 @@ import logging
 logging.getLogger("AQRS").setLevel(logging.ERROR)
 import warnings
 warnings.filterwarnings("ignore")
+
+
+KILLZONES = {
+    "ASIAN":   ((0, 0), (3, 0)),
+    "LONDON":  ((7, 0), (10, 0)),
+    "NY_AM":   ((13, 0), (16, 0)),
+    "NY_PM":   ((17, 0), (19, 0)),
+}
+VALID_SESSIONS = {"LONDON", "NY_AM"}
+
+
+def session_at(bar_time):
+    current = bar_time.hour * 60 + bar_time.minute
+    for name, ((sh, sm), (eh, em)) in KILLZONES.items():
+        start = sh * 60 + sm
+        end = eh * 60 + em
+        if start <= current < end:
+            return name
+    return "OFF_HOURS"
+
+
+def is_valid_session_at(bar_time, strict=True):
+    session = session_at(bar_time)
+    if strict:
+        return session in VALID_SESSIONS
+    return session != "OFF_HOURS"
 
 
 # ── Simulated account ───────────────────────────────────────────────────────
@@ -388,7 +421,7 @@ def run_backtest(symbols=None, balance=10000):
             if not ok:
                 continue
 
-            if not is_valid_session(strict=False):
+            if not is_valid_session_at(current_time, strict=False):
                 continue
 
             # ── Build context ───────────────────────────────────────────────
@@ -415,8 +448,9 @@ def run_backtest(symbols=None, balance=10000):
             direction = "BUY" if bias == "BULLISH" else "SELL"
 
             # Require trend strength
+            min_adx = PAIR_MIN_ADX.get(symbol, 20)
             adx = df_context['adx'].iloc[-1]
-            if adx < 15:
+            if adx < min_adx:
                 continue
 
             # ── Candle confirmation ─────────────────────────────────────────
@@ -470,6 +504,18 @@ def run_backtest(symbols=None, balance=10000):
                 continue
 
             # ── Score ───────────────────────────────────────────────────────
+            inducement = detect_inducement(df_context, direction)
+            pd_aligned = (
+                (direction == "BUY" and pd_zone == "DISCOUNT") or
+                (direction == "SELL" and pd_zone == "PREMIUM")
+            )
+            if PAIR_REQUIRE_PD_ALIGNMENT.get(symbol, False) and not pd_aligned:
+                continue
+
+            has_smc_entry_zone = in_fvg or in_ob or bool(liquidity) or inducement
+            if PAIR_REQUIRE_ZONE_OR_SWEEP.get(symbol, False) and not has_smc_entry_zone:
+                continue
+
             score_data = {
                 "bias": bias,
                 "structure_trend": structure["trend"],
@@ -483,8 +529,8 @@ def run_backtest(symbols=None, balance=10000):
                 "manipulation": manipulation_score(df_context, symbol),
                 "candle_confirm": candle_confirm,
                 "premium_discount": pd_zone,
-                "inducement": detect_inducement(df_context, direction),
-                "valid_session": is_valid_session(strict=True),
+                "inducement": inducement,
+                "valid_session": is_valid_session_at(current_time, strict=True),
                 "direction": direction,
                 "lifecycle_modifier": lifecycle["score_modifier"],
                 "regime_modifier": regime["score_modifier"],
@@ -497,7 +543,7 @@ def run_backtest(symbols=None, balance=10000):
             }
 
             score = calculate_score(score_data)
-            if score < 50:
+            if score < PAIR_MIN_SCORE.get(symbol, 50):
                 continue
 
             # ── ML gate ─────────────────────────────────────────────────────
@@ -526,8 +572,8 @@ def run_backtest(symbols=None, balance=10000):
                 volume=volume, rr=exits["rr"], score=score,
                 logic=exits["logic"],
                 regime=regime["regime"], lifecycle=lifecycle["phase"],
-                phase=current_session(),
-                session=current_session(),
+                phase=session_at(current_time),
+                session=session_at(current_time),
                 pd_zone=pd_zone, vp_zone=vp_z,
                 ml_regime=ml_regime,
             )
@@ -557,12 +603,15 @@ def run_backtest(symbols=None, balance=10000):
     # ── Save to CSV ────────────────────────────────────────────────────────
     if all_trades:
         csv_path = f"backtest_results.csv"
-        with open(csv_path, 'w', newline='') as f:
-            w = csv.DictWriter(f, fieldnames=list(all_trades[0].keys()),
-                               extrasaction='ignore')
-            w.writeheader()
-            w.writerows(all_trades)
-        print(f"\nTrade log saved to: {csv_path}")
+        try:
+            with open(csv_path, 'w', newline='') as f:
+                w = csv.DictWriter(f, fieldnames=list(all_trades[0].keys()),
+                                   extrasaction='ignore')
+                w.writeheader()
+                w.writerows(all_trades)
+            print(f"\nTrade log saved to: {csv_path}")
+        except PermissionError:
+            print(f"\nTrade log not saved: permission denied for {csv_path}")
 
     return all_trades
 
@@ -571,7 +620,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="AQRS FX Pro V3 Backtest")
     parser.add_argument("--symbols", nargs="+",
-                        default=["EURUSD", "GBPUSD", "USDJPY", "USDCHF"],
+                        default=SYMBOLS,
                         help="Symbols to backtest")
     parser.add_argument("--balance", type=float, default=10000,
                         help="Starting balance")

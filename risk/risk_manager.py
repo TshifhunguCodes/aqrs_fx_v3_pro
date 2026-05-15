@@ -100,12 +100,12 @@ def manage_trailing_stops(magic: int = 777):
             if pos.type == mt5.ORDER_TYPE_BUY:
                 new_sl = tick.bid - trail_pts * point
                 if new_sl > pos.sl + point:
-                    _modify_sl(pos.ticket, new_sl)
+                    _modify_sl(pos.ticket, new_sl, pos.symbol)
 
             elif pos.type == mt5.ORDER_TYPE_SELL:
                 new_sl = tick.ask + trail_pts * point
                 if new_sl < pos.sl - point or pos.sl == 0:
-                    _modify_sl(pos.ticket, new_sl)
+                    _modify_sl(pos.ticket, new_sl, pos.symbol)
 
     except Exception as e:
         logger.warning(f"Trailing stop error: {e}")
@@ -129,24 +129,25 @@ def manage_breakeven(magic: int = 777, trigger_rr: float = 1.0):
             if pos.type == mt5.ORDER_TYPE_BUY:
                 target = pos.price_open + risk_dist * trigger_rr
                 if tick.bid > target and pos.sl < pos.price_open:
-                    _modify_sl(pos.ticket, pos.price_open + mt5.symbol_info(pos.symbol).point)
+                    _modify_sl(pos.ticket, pos.price_open + mt5.symbol_info(pos.symbol).point, pos.symbol)
             elif pos.type == mt5.ORDER_TYPE_SELL:
                 target = pos.price_open - risk_dist * trigger_rr
                 if tick.ask < target and pos.sl > pos.price_open:
-                    _modify_sl(pos.ticket, pos.price_open - mt5.symbol_info(pos.symbol).point)
+                    _modify_sl(pos.ticket, pos.price_open - mt5.symbol_info(pos.symbol).point, pos.symbol)
 
     except Exception as e:
         logger.warning(f"Breakeven error: {e}")
 
 
-def _modify_sl(ticket: int, new_sl: float):
+def _modify_sl(ticket: int, new_sl: float, symbol: str = ""):
     request = {
         "action":   mt5.TRADE_ACTION_SLTP,
         "position": ticket,
+        "symbol":   symbol,
         "sl":       new_sl,
     }
     result = mt5.order_send(request)
     if result and result.retcode == mt5.TRADE_RETCODE_DONE:
         logger.info(f"SL modified | ticket={ticket} | new_sl={new_sl:.5f}")
     else:
-        logger.warning(f"SL modify failed | ticket={ticket} | result={result}")
+        logger.warning(f"SL modify failed | ticket={ticket} | retcode={result.retcode if result else 'None'}")

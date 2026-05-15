@@ -34,7 +34,21 @@ from execution.entries import EntryExecutor
 from analytics.trade_journal import log_trade
 
 from core.config import (SYMBOLS, TIMEFRAME, HTF_TIMEFRAME,
-                          MIN_SIGNAL_SCORE, MAX_SPREADS)
+                          MIN_SIGNAL_SCORE, MAX_SPREADS,
+                          PAIR_MIN_ADX, PAIR_MIN_SCORE,
+                          PAIR_REQUIRE_PD_ALIGNMENT,
+                          PAIR_REQUIRE_ZONE_OR_SWEEP,
+                          TELEGRAM_ENABLED, TELEGRAM_NOTIFY_TRADES)
+
+# Optional Telegram notifications
+try:
+    from notifications import send as tg_send, trade_opened as tg_trade_opened
+    from core.config import TELEGRAM_BOT_TOKEN
+    _tg_available = bool(TELEGRAM_BOT_TOKEN)
+except Exception:
+    _tg_available = False
+    def tg_send(*args, **kwargs): pass
+    def tg_trade_opened(*args, **kwargs): return ""
 from core.logger import logger
 
 
@@ -95,9 +109,10 @@ class AQRSFX:
         direction = "BUY" if bias == "BULLISH" else "SELL"
 
         # Require trend strength
+        min_adx = PAIR_MIN_ADX.get(symbol, 20)
         adx = df['adx'].iloc[-1]
-        if adx < 20:
-            logger.info(f"{symbol} ADX too low ({adx:.1f}) — skipping")
+        if adx < min_adx:
+            logger.info(f"{symbol} ADX too low ({adx:.1f} < {min_adx}) - skipping")
             return
 
         # ── Candle confirmation (hard gate — fail fast) ───────────────────────
@@ -157,6 +172,20 @@ class AQRSFX:
             return
 
         # ── Score ─────────────────────────────────────────────────────────────
+        inducement = detect_inducement(df, direction)
+        pd_aligned = (
+            (direction == "BUY" and pd_zone == "DISCOUNT") or
+            (direction == "SELL" and pd_zone == "PREMIUM")
+        )
+        if PAIR_REQUIRE_PD_ALIGNMENT.get(symbol, False) and not pd_aligned:
+            logger.info(f"{symbol} pd={pd_zone} not aligned for {direction}")
+            return
+
+        has_smc_entry_zone = in_fvg or in_ob or bool(liquidity) or inducement
+        if PAIR_REQUIRE_ZONE_OR_SWEEP.get(symbol, False) and not has_smc_entry_zone:
+            logger.info(f"{symbol} skipped - no OB/FVG/sweep/inducement confirmation")
+            return
+
         score_data = {
             "bias":               bias,
             "structure_trend":    structure["trend"],
@@ -170,7 +199,7 @@ class AQRSFX:
             "manipulation":       manipulation_score(df, symbol),
             "candle_confirm":     candle_confirm,
             "premium_discount":   pd_zone,
-            "inducement":         detect_inducement(df, direction),
+            "inducement":         inducement,
             "valid_session":      is_valid_session(strict=True),
             "direction":          direction,
             "lifecycle_modifier": lifecycle["score_modifier"],
@@ -191,8 +220,9 @@ class AQRSFX:
             f"vp={vp_z} | pd={pd_zone} | mtf={mtf_aligned}"
         )
 
-        if score < MIN_SIGNAL_SCORE:
-            logger.info(f"{symbol} score {score} < {MIN_SIGNAL_SCORE} — skip")
+        min_score = max(MIN_SIGNAL_SCORE, PAIR_MIN_SCORE.get(symbol, MIN_SIGNAL_SCORE))
+        if score < min_score:
+            logger.info(f"{symbol} score {score} < {min_score} - skip")
             return
 
         # ── Adaptive ML gate ──────────────────────────────────────────────────
@@ -247,6 +277,23 @@ class AQRSFX:
 
         logger.info(f"{symbol} ✅ order sent | vol={volume} | rr={exits['rr']} | {result}")
 
+        # Send Telegram notification on successful trade
+        if _tg_available and TELEGRAM_NOTIFY_TRADES and result and result.retcode == 10009:
+            tg_msg = tg_trade_opened(
+                symbol=symbol, direction=direction, volume=volume,
+                entry=current_price, sl=sl, tp=tp,
+                score=score, rr=exits["rr"],
+                reason=exits["logic"]
+            )
+            tg_send(tg_msg)
+
+    # ─────────────────────────────────────────────────────────────────────────
+    def _send_tg_error(self, symbol, context, error):
+        """Send Telegram error notification if enabled."""
+        if _tg_available and TELEGRAM_ENABLED:
+            from notifications import error_alert
+            tg_send(error_alert(f"Error processing {symbol}", f"{context}: {error}"))
+
     # ─────────────────────────────────────────────────────────────────────────
     def run(self):
         self.mt5.connect()
@@ -265,3 +312,4 @@ class AQRSFX:
             self.process_pair(symbol)
         except Exception as e:
             logger.error(f"{symbol} error: {e}", exc_info=True)
+            self._send_tg_error(symbol, "process_pair", e)
