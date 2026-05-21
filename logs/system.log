@@ -23619,3 +23619,122 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd7 in position 384: invali
 2026-05-21 19:17:00,918 - INFO - GBPUSD | dir=BUY | score=47 | regime=BREAKOUT | lifecycle=REVERSAL_WATCH | vp=ABOVE_VAH | pd=PREMIUM | mtf=False
 2026-05-21 19:17:00,922 - INFO - USDCAD no candle confirmation
 2026-05-21 19:17:00,922 - INFO - GBPUSD score 47 < 50 - skip
+2026-05-21 19:17:30,945 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:17:30,947 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:17:30,951 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:17:30,955 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:17:30,961 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:17:31,525 - INFO - USDJPY ADX too low (12.7 < 24) - skipping
+2026-05-21 19:17:31,706 - INFO - USDCHF ADX too low (17.7 < 24) - skipping
+2026-05-21 19:17:31,723 - INFO - USDCAD no candle confirmation
+2026-05-21 19:17:31,726 - INFO - EURUSD ADX too low (17.9 < 18) - skipping
+2026-05-21 19:17:31,767 - INFO - GBPUSD | dir=BUY | score=47 | regime=BREAKOUT | lifecycle=REVERSAL_WATCH | vp=ABOVE_VAH | pd=PREMIUM | mtf=False
+2026-05-21 19:17:31,767 - INFO - GBPUSD score 47 < 50 - skip
+2026-05-21 19:17:58,387 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-21 19:18:01,793 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:18:01,798 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:18:01,804 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:18:01,811 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:18:01,813 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:18:02,539 - INFO - USDJPY ADX too low (12.8 < 24) - skipping
+2026-05-21 19:18:02,596 - INFO - GBPUSD | dir=BUY | score=47 | regime=BREAKOUT | lifecycle=REVERSAL_WATCH | vp=ABOVE_VAH | pd=PREMIUM | mtf=False
+2026-05-21 19:18:02,597 - INFO - GBPUSD score 47 < 50 - skip
+2026-05-21 19:18:02,705 - INFO - USDCHF ADX too low (17.8 < 24) - skipping
+2026-05-21 19:18:02,752 - INFO - EURUSD | dir=BUY | score=47 | regime=BREAKOUT | lifecycle=REVERSAL_WATCH | vp=ABOVE_VAH | pd=PREMIUM | mtf=False
+2026-05-21 19:18:02,752 - INFO - EURUSD score 47 < 50 - skip
+2026-05-21 19:18:02,761 - INFO - USDCAD no candle confirmation
+2026-05-21 19:18:32,787 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:18:32,793 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:18:32,802 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:18:32,821 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:18:32,849 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:18:33,282 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:18:33,306 - INFO - USDCAD indicator tape conflicts with BUY: ['macd', 'di', 'bb']
+2026-05-21 19:18:33,314 - INFO - USDCHF ADX too low (17.8 < 24) - skipping
+2026-05-21 19:18:33,321 - INFO - EURUSD no candle confirmation
+2026-05-21 19:18:33,329 - INFO - USDJPY ADX too low (12.8 < 24) - skipping
+2026-05-21 19:18:58,388 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-21 19:19:03,363 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:19:03,368 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:19:03,371 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:19:03,379 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:19:03,386 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:19:03,942 - INFO - USDJPY ADX too low (12.8 < 24) - skipping
+2026-05-21 19:19:03,971 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:19:04,009 - INFO - USDCAD no candle confirmation
+2026-05-21 19:19:04,032 - INFO - EURUSD no candle confirmation
+2026-05-21 19:19:04,033 - INFO - USDCHF ADX too low (17.8 < 24) - skipping
+2026-05-21 19:19:34,062 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:19:34,070 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:19:34,078 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:19:34,080 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:19:34,086 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:19:34,544 - INFO - USDCHF ADX too low (17.8 < 24) - skipping
+2026-05-21 19:19:34,592 - INFO - USDJPY ADX too low (12.8 < 24) - skipping
+2026-05-21 19:19:34,619 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:19:34,624 - INFO - USDCAD indicator tape conflicts with BUY: ['macd', 'di', 'bb']
+2026-05-21 19:19:34,634 - INFO - EURUSD no candle confirmation
+2026-05-21 19:19:58,389 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-21 19:20:04,664 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:20:04,671 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:20:04,674 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:20:04,684 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:20:04,696 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:20:05,238 - INFO - USDCHF ADX too low (21.3 < 24) - skipping
+2026-05-21 19:20:05,244 - INFO - USDCAD no candle confirmation
+2026-05-21 19:20:05,274 - INFO - EURUSD no candle confirmation
+2026-05-21 19:20:05,298 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:20:05,301 - INFO - USDJPY ADX too low (15.9 < 24) - skipping
+2026-05-21 19:20:35,335 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:20:35,342 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:20:35,345 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:20:35,351 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:20:35,359 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:20:35,795 - INFO - EURUSD no candle confirmation
+2026-05-21 19:20:35,895 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:20:35,922 - INFO - USDCHF ADX too low (21.3 < 24) - skipping
+2026-05-21 19:20:35,928 - INFO - USDJPY ADX too low (15.9 < 24) - skipping
+2026-05-21 19:20:35,934 - INFO - USDCAD no candle confirmation
+2026-05-21 19:20:58,390 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-21 19:21:05,957 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:21:05,963 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:21:05,967 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:21:05,979 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:21:06,005 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:21:06,479 - INFO - EURUSD no candle confirmation
+2026-05-21 19:21:06,483 - INFO - USDCHF ADX too low (21.3 < 24) - skipping
+2026-05-21 19:21:06,505 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:21:06,508 - INFO - USDCAD no candle confirmation
+2026-05-21 19:21:06,515 - INFO - USDJPY ADX too low (16.0 < 24) - skipping
+2026-05-21 19:21:36,542 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:21:36,555 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:21:36,565 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:21:36,566 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:21:36,573 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:21:37,091 - INFO - USDCHF ADX too low (21.3 < 24) - skipping
+2026-05-21 19:21:37,094 - INFO - EURUSD no candle confirmation
+2026-05-21 19:21:37,099 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:21:37,111 - INFO - USDJPY ADX too low (16.0 < 24) - skipping
+2026-05-21 19:21:37,115 - INFO - USDCAD no candle confirmation
+2026-05-21 19:21:58,391 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-21 19:22:07,137 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:22:07,140 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:22:07,142 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:22:07,158 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:22:07,171 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:22:07,704 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:22:07,762 - INFO - USDCHF ADX too low (21.3 < 24) - skipping
+2026-05-21 19:22:07,765 - INFO - USDCAD no candle confirmation
+2026-05-21 19:22:07,767 - INFO - EURUSD no candle confirmation
+2026-05-21 19:22:07,769 - INFO - USDJPY ADX too low (16.0 < 24) - skipping
+2026-05-21 19:22:37,791 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:22:37,797 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:22:37,809 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:22:37,829 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:22:37,836 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:22:38,322 - INFO - USDJPY ADX too low (16.0 < 24) - skipping
+2026-05-21 19:22:38,358 - INFO - USDCAD no candle confirmation
+2026-05-21 19:22:38,363 - INFO - EURUSD no candle confirmation
+2026-05-21 19:22:38,369 - INFO - GBPUSD no candle confirmation
+2026-05-21 19:22:38,376 - INFO - USDCHF ADX too low (21.3 < 24) - skipping
+2026-05-21 19:22:41,464 - INFO - Shutdown requested by user. Exiting...
