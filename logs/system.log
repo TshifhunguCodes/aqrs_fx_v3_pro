@@ -23571,3 +23571,51 @@ UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd7 in position 384: invali
 2026-05-18 21:23:41,981 - INFO - USDCHF blocked — NEWS_BLACKOUT:FOMC
 2026-05-18 21:23:41,982 - INFO - ━━ USDCAD | session=OFF_HOURS
 2026-05-18 21:23:41,982 - INFO - USDCAD blocked — NEWS_BLACKOUT:FOMC
+2026-05-21 19:15:57,710 - INFO - Telegram notifications configured
+2026-05-21 19:15:57,713 - INFO - ============================================================
+2026-05-21 19:15:57,713 - INFO - AQRS FX Pro V3 — Starting
+2026-05-21 19:15:57,713 - INFO - ============================================================
+2026-05-21 19:15:57,715 - INFO - Signal loop started
+2026-05-21 19:15:57,798 - INFO - Thread started: signal
+2026-05-21 19:15:57,799 - INFO - Risk loop started
+2026-05-21 19:15:57,800 - INFO - Thread started: risk
+2026-05-21 19:15:57,800 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:15:57,801 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:15:57,801 - INFO - Journal loop started
+2026-05-21 19:15:57,804 - INFO - Thread started: journal
+2026-05-21 19:15:58,090 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:15:58,133 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:15:58,133 - INFO - ML loop started
+2026-05-21 19:15:58,134 - INFO - Thread started: ml
+2026-05-21 19:15:58,323 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:15:58,324 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-21 19:15:59,137 - INFO - EURUSD ADX too low (17.3 < 18) - skipping
+2026-05-21 19:15:59,157 - INFO - USDCHF ADX too low (17.1 < 24) - skipping
+2026-05-21 19:15:59,172 - INFO - USDJPY ADX too low (12.2 < 24) - skipping
+2026-05-21 19:15:59,315 - INFO - USDCAD ADX too low (19.6 < 20) - skipping
+2026-05-21 19:15:59,357 - INFO - GBPUSD | dir=BUY | score=47 | regime=BREAKOUT | lifecycle=REVERSAL_WATCH | vp=ABOVE_VAH | pd=PREMIUM | mtf=False
+2026-05-21 19:15:59,357 - INFO - GBPUSD score 47 < 50 - skip
+2026-05-21 19:16:00,990 - INFO - Telegram message sent
+2026-05-21 19:16:29,384 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:16:29,387 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:16:29,406 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:16:29,420 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:16:29,424 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:16:29,853 - INFO - USDCAD ADX too low (20.0 < 20) - skipping
+2026-05-21 19:16:29,936 - INFO - EURUSD ADX too low (17.6 < 18) - skipping
+2026-05-21 19:16:29,947 - INFO - USDJPY ADX too low (12.5 < 24) - skipping
+2026-05-21 19:16:29,955 - INFO - USDCHF ADX too low (17.3 < 24) - skipping
+2026-05-21 19:16:30,110 - INFO - GBPUSD | dir=BUY | score=47 | regime=BREAKOUT | lifecycle=REVERSAL_WATCH | vp=ABOVE_VAH | pd=PREMIUM | mtf=False
+2026-05-21 19:16:30,110 - INFO - GBPUSD score 47 < 50 - skip
+2026-05-21 19:16:58,387 - INFO - Threads alive: ['signal', 'risk', 'journal', 'ml']
+2026-05-21 19:17:00,134 - INFO - ━━ EURUSD | session=NY_PM
+2026-05-21 19:17:00,144 - INFO - ━━ GBPUSD | session=NY_PM
+2026-05-21 19:17:00,148 - INFO - ━━ USDJPY | session=NY_PM
+2026-05-21 19:17:00,155 - INFO - ━━ USDCHF | session=NY_PM
+2026-05-21 19:17:00,165 - INFO - ━━ USDCAD | session=NY_PM
+2026-05-21 19:17:00,635 - INFO - USDJPY ADX too low (12.7 < 24) - skipping
+2026-05-21 19:17:00,692 - INFO - EURUSD ADX too low (17.8 < 18) - skipping
+2026-05-21 19:17:00,728 - INFO - USDCHF ADX too low (17.5 < 24) - skipping
+2026-05-21 19:17:00,918 - INFO - GBPUSD | dir=BUY | score=47 | regime=BREAKOUT | lifecycle=REVERSAL_WATCH | vp=ABOVE_VAH | pd=PREMIUM | mtf=False
+2026-05-21 19:17:00,922 - INFO - USDCAD no candle confirmation
+2026-05-21 19:17:00,922 - INFO - GBPUSD score 47 < 50 - skip
