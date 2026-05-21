@@ -7,13 +7,15 @@ Replaces flat 1.5×ATR SL / 3×ATR TP with context-aware exits.
 
 def dynamic_sltp(entry: float, atr: float, direction: str,
                  regime: str = "UNKNOWN", phase: str = "TREND_HEALTHY",
-                 bb_pct: float = 0.5, rr_override: float = None) -> dict:
+                 bb_pct: float = 0.5, rr_override: float = None,
+                 sl_mult_override: float = None,
+                 min_stop_distance: float = 0.0) -> dict:
     """
     Returns {'sl': float, 'tp': float, 'sl_dist': float,
              'tp_dist': float, 'rr': float, 'logic': str}
     """
     # Base SL multiplier — tighten in choppy/volatile, widen in healthy trend
-    sl_mult = {
+    sl_mult = sl_mult_override or {
         "ALIGNED_TREND":   1.5,
         "TREND_MISMATCH":  2.0,
         "CHOPPY":          2.5,
@@ -35,6 +37,7 @@ def dynamic_sltp(entry: float, atr: float, direction: str,
 
     sl_dist = atr * sl_mult * phase_mult
     sl_dist = max(sl_dist, atr * 1.0)   # floor: never less than 1×ATR
+    sl_dist = max(sl_dist, min_stop_distance)
 
     # Dynamic R:R — tighter in healthy trend, wider in uncertain conditions
     if rr_override:

@@ -14,6 +14,11 @@ AQRS FX Pro V3 is a Python-based forex trading system that combines institutiona
 - Telegram notifications for system state, errors, and summaries
 - Configurable risk, symbol selection, and session gating
 - Support for 5 forex pairs by default
+- AQRS-style ALPHA/FLOW signal resolution:
+  - ALPHA owns strict high-confluence sniper trades
+  - FLOW owns broader exploratory trades with reduced risk
+  - a final execution gate blocks direction, indicator, trend, and premium/discount conflicts
+- Currency-aware symbol suffix resolution, pip-based stop floors, and FLOW-specific ATR/RR settings
 
 ## Requirements
 
@@ -81,7 +86,9 @@ Important configuration options include:
 - `SYMBOLS` - active symbol list for live trading
 - `TIMEFRAME`, `HTF_TIMEFRAME` - chart resolutions used by the engine
 - `MIN_SIGNAL_SCORE`, `MAX_OPEN_TRADES`, `MAX_DAILY_DRAWDOWN`
+- `ALPHA_MIN_SCORE`, `FLOW_MIN_SCORE`, `FLOW_RISK_MULTIPLIER`, `FLOW_DAILY_LIMIT`
 - `PAIR_RISK`, `MAX_SPREADS`, `PAIR_MIN_ADX`, `PAIR_MIN_SCORE`
+- `PAIR_PIP_SIZE`, `PAIR_MIN_STOP_PIPS`, `SYMBOL_SUFFIXES`
 - `ML_RETRAIN_EVERY`, `KMEANS_CLUSTERS`, `ML_MODELS_DIR`
 - `NEWS_BLACKOUT_WINDOWS`
 - `LOOP_SIGNAL_INTERVAL`, `LOOP_RISK_INTERVAL`, `LOOP_JOURNAL_INTERVAL`, `LOOP_ML_INTERVAL`

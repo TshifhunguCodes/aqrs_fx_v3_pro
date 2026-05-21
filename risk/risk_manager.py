@@ -19,7 +19,8 @@ def get_balance() -> float:
         return DEFAULT_BALANCE
 
 
-def lot_size(symbol: str, sl_dist_price: float, balance: float = None) -> float:
+def lot_size(symbol: str, sl_dist_price: float, balance: float = None,
+             risk_multiplier: float = 1.0) -> float:
     """
     ATR-distance-based position sizing.
     Risk fraction × balance / (SL distance in price × contract value).
@@ -27,7 +28,7 @@ def lot_size(symbol: str, sl_dist_price: float, balance: float = None) -> float:
     """
     balance = balance or get_balance()
     risk_frac = PAIR_RISK.get(symbol, 0.005)
-    risk_amount = balance * risk_frac
+    risk_amount = balance * risk_frac * risk_multiplier
 
     try:
         info = mt5.symbol_info(symbol)

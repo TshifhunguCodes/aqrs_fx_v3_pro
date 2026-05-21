@@ -1,5 +1,6 @@
 import MetaTrader5 as mt5
 import pandas as pd
+from core.config import SYMBOL_SUFFIXES
 
 
 class MT5Connector:
@@ -11,7 +12,32 @@ class MT5Connector:
 
         print("MT5 Connected")
 
+    def resolve_symbol(self, preferred_symbol):
+        """Find the broker's tradable variant for a configured FX symbol."""
+        candidates = [preferred_symbol]
+        if "." in preferred_symbol:
+            candidates.append(preferred_symbol.split(".")[0])
+        candidates.extend(f"{preferred_symbol}{suffix}" for suffix in SYMBOL_SUFFIXES if suffix)
+
+        for candidate in dict.fromkeys(candidates):
+            info = mt5.symbol_info(candidate)
+            if info:
+                if not info.visible:
+                    mt5.symbol_select(candidate, True)
+                return candidate
+
+        all_symbols = mt5.symbols_get() or []
+        compact_preferred = preferred_symbol.replace(".", "").upper()
+        for item in all_symbols:
+            compact_name = item.name.replace(".", "").upper()
+            if compact_name.startswith(compact_preferred):
+                mt5.symbol_select(item.name, True)
+                return item.name
+
+        return preferred_symbol
+
     def get_rates(self, symbol, timeframe, bars=500):
+        symbol = self.resolve_symbol(symbol)
 
         tf_map = {
             "M5": mt5.TIMEFRAME_M5,
@@ -28,6 +54,8 @@ class MT5Connector:
         )
 
         df = pd.DataFrame(rates)
+        if df.empty:
+            return df
         df['time'] = pd.to_datetime(df['time'], unit='s')
 
         return df

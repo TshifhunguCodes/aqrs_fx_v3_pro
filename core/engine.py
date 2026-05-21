@@ -8,6 +8,7 @@ import threading
 from market.mt5_connector import MT5Connector
 from market.candles import add_indicators, merge_htf_context
 from market.spread import get_spread
+from market.behavior import classify_behavior
 
 from strategy.htf_bias import get_bias
 from strategy.structure import classify_structure, premium_discount, detect_inducement
@@ -18,6 +19,10 @@ from strategy.manipulation import manipulation_score
 from strategy.candle_confirm import get_candle_confirmation
 from strategy.session import is_valid_session, current_session
 from strategy.scoring import calculate_score
+from strategy.indicator_confirm import indicator_tape
+from systems.alpha import generate_alpha_setup
+from systems.flow import generate_flow_setup
+from execution.gate import execution_gate
 
 from regime.volume_profile import build_volume_profile, vp_zone, vp_near_poc
 from regime.market_lifecycle import classify_lifecycle
@@ -38,7 +43,9 @@ from core.config import (SYMBOLS, TIMEFRAME, HTF_TIMEFRAME,
                           PAIR_MIN_ADX, PAIR_MIN_SCORE,
                           PAIR_REQUIRE_PD_ALIGNMENT,
                           PAIR_REQUIRE_ZONE_OR_SWEEP,
-                          TELEGRAM_ENABLED, TELEGRAM_NOTIFY_TRADES)
+                          TELEGRAM_ENABLED, TELEGRAM_NOTIFY_TRADES,
+                          PAIR_PIP_SIZE, PAIR_MIN_STOP_PIPS,
+                          FLOW_RISK_MULTIPLIER, MAGIC_NUMBER)
 
 # Optional Telegram notifications
 try:
@@ -99,14 +106,13 @@ class AQRSFX:
 
         current_price = df.iloc[-1]['close']
         atr           = df.iloc[-1]['atr']
+        pip_size      = PAIR_PIP_SIZE.get(symbol, 0.01 if "JPY" in symbol else 0.0001)
+        min_stop_distance = PAIR_MIN_STOP_PIPS.get(symbol, 8) * pip_size
+        behavior = classify_behavior(df, pip_size)
 
         # ── HTF bias ──────────────────────────────────────────────────────────
         bias = get_bias(df_h1)   # bias from H1
-        if bias == "RANGE":
-            logger.info(f"{symbol} H1 in range — skipping")
-            return
-
-        direction = "BUY" if bias == "BULLISH" else "SELL"
+        direction = "BUY" if bias == "BULLISH" else "SELL" if bias == "BEARISH" else ("BUY" if df.iloc[-1].get("ema8", 0) > df.iloc[-1].get("ema21", 0) else "SELL")
 
         # Require trend strength
         min_adx = PAIR_MIN_ADX.get(symbol, 20)
@@ -119,6 +125,10 @@ class AQRSFX:
         candle_confirm = get_candle_confirmation(df, direction)
         if not candle_confirm["confirmed"]:
             logger.info(f"{symbol} no candle confirmation")
+            return
+        indicators = indicator_tape(df, direction)
+        if indicators["strong_conflict"]:
+            logger.info(f"{symbol} indicator tape conflicts with {direction}: {indicators['conflicts']}")
             return
 
         # ── Market structure ──────────────────────────────────────────────────
@@ -210,6 +220,7 @@ class AQRSFX:
             "mtf_aligned":        mtf_aligned,
             "adx":                df.iloc[-1].get('adx', 0),
             "macd_aligned":       macd_aligned,
+            "indicator_score":    indicators["score"],
         }
 
         score = calculate_score(score_data)
@@ -224,6 +235,34 @@ class AQRSFX:
         if score < min_score:
             logger.info(f"{symbol} score {score} < {min_score} - skip")
             return
+
+        decision_context = {
+            "symbol": symbol,
+            "direction": direction,
+            "bias": bias,
+            "structure": structure,
+            "liquidity": liquidity,
+            "price_in_fvg": in_fvg,
+            "price_in_ob": in_ob,
+            "inducement": inducement,
+            "pd_zone": pd_zone,
+            "regime": regime,
+            "lifecycle": lifecycle,
+            "mtf_aligned": mtf_aligned,
+            "indicators": indicators,
+            "candle_confirm": candle_confirm,
+            "behavior_label": behavior["label"],
+            "behavior_confidence": behavior["confidence"],
+        }
+        alpha_setup = generate_alpha_setup(score, decision_context)
+        flow_setup = generate_flow_setup(score, decision_context)
+        resolved = self._resolve_signals(alpha_setup, flow_setup)
+        gate = execution_gate(decision_context, resolved)
+        if not gate["approved"]:
+            logger.info(f"{symbol} execution gate blocked: {gate['reason']}")
+            return
+
+        direction = resolved["direction"]
 
         # ── Adaptive ML gate ──────────────────────────────────────────────────
         ml_gate = adaptive_gate(
@@ -243,21 +282,30 @@ class AQRSFX:
             regime    = regime["regime"],
             phase     = lifecycle["phase"],
             bb_pct    = df.iloc[-1].get('bb_pct', 0.5),
+            rr_override = resolved.get("rr_ratio"),
+            sl_mult_override = resolved.get("atr_sl_multiplier"),
+            min_stop_distance = min_stop_distance,
         )
         sl = exits["sl"]
         tp = exits["tp"]
 
         # ── Position sizing ───────────────────────────────────────────────────
         balance = get_balance()
-        volume  = lot_size(symbol, exits["sl_dist"], balance)
+        risk_multiplier = FLOW_RISK_MULTIPLIER if resolved["signal_owner"] == "FLOW" else 1.0
+        volume  = lot_size(symbol, exits["sl_dist"], balance, risk_multiplier=risk_multiplier)
 
         # ── Execute ───────────────────────────────────────────────────────────
-        result = self.executor.execute(symbol, direction, volume, sl, tp)
+        comment = self._order_comment(resolved)
+        result = self.executor.execute(symbol, direction, volume, sl, tp, comment=comment, magic=MAGIC_NUMBER)
 
         log_trade({
             "symbol":        symbol,
             "direction":     direction,
             "score":         score,
+            "signal_owner":  resolved["signal_owner"],
+            "quality":       resolved["quality"],
+            "behavior":      behavior["label"],
+            "indicator_tape": indicators,
             "entry":         current_price,
             "sl":            sl,
             "tp":            tp,
@@ -288,6 +336,65 @@ class AQRSFX:
             tg_send(tg_msg)
 
     # ─────────────────────────────────────────────────────────────────────────
+    def _resolve_signals(self, alpha_setup: dict, flow_setup: dict) -> dict:
+        """Reduce ALPHA/FLOW into one execution signal."""
+        if alpha_setup.get("alpha_signal") == "ALPHA_TRADE":
+            score = alpha_setup["alpha_score"]
+            direction = alpha_setup.get("alpha_direction")
+            owner = "ALPHA"
+            trade_type = "ALPHA"
+            atr_sl_multiplier = None
+            rr_ratio = None
+        elif flow_setup.get("flow_signal") == "FLOW_TRADE":
+            score = flow_setup["flow_score"]
+            direction = flow_setup.get("flow_direction")
+            owner = "FLOW"
+            trade_type = flow_setup.get("flow_trade_type", "FLOW")
+            atr_sl_multiplier = flow_setup.get("flow_atr_sl_multiplier")
+            rr_ratio = flow_setup.get("flow_rr_ratio")
+        else:
+            return {
+                "signal": "NO_TRADE",
+                "signal_owner": "NONE",
+                "resolved_direction": None,
+                "confirm_score": 0,
+                "quality": "NONE",
+                "confirmed_signal": False,
+                "direction": "NO_TRADE",
+                "market_regime": "UNKNOWN",
+                "market_state": "UNKNOWN",
+            }
+
+        if direction not in ("LONG", "SHORT"):
+            return {"signal": "NO_TRADE", "signal_owner": owner, "direction": "NO_TRADE", "quality": "NONE"}
+
+        quality = "ELITE" if score >= 85 else "HIGH" if score >= 70 else "MEDIUM" if score >= 55 else "NONE"
+        return {
+            "signal": f"{owner}_TRADE",
+            "signal_owner": owner,
+            "resolved_direction": direction,
+            "confirm_score": score,
+            "quality": quality,
+            "confirmed_signal": quality != "NONE",
+            "direction": "BUY" if direction == "LONG" else "SELL",
+            "market_regime": trade_type,
+            "market_state": owner,
+            "atr_sl_multiplier": atr_sl_multiplier,
+            "rr_ratio": rr_ratio,
+        }
+
+    def _order_comment(self, resolved: dict) -> str:
+        if resolved["signal_owner"] == "ALPHA":
+            return f"AQ_ALPHA_{resolved['quality']}"
+
+        setup_code = {
+            "MOMENTUM_CONTINUATION": "MOM",
+            "MICRO_RETRACEMENT_REENTRY": "REENT",
+            "EXHAUSTION_FADE": "EXH",
+            "EARLY_REVERSAL_ENTRY": "REV",
+        }.get(resolved.get("market_regime"), "FLOW")
+        return f"AQ_FLOW_EXP_{setup_code}_{resolved['quality']}"
+
     def _send_tg_error(self, symbol, context, error):
         """Send Telegram error notification if enabled."""
         if _tg_available and TELEGRAM_ENABLED:

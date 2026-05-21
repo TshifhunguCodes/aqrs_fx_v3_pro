@@ -131,7 +131,10 @@ if __name__ == "__main__":
         logger.info(f"Thread started: {t.name}")
 
     # Keep main thread alive
-    while True:
-        alive = [t.name for t in threads if t.is_alive()]
-        logger.info(f"Threads alive: {alive}")
-        time.sleep(60)
+    try:
+        while True:
+            alive = [t.name for t in threads if t.is_alive()]
+            logger.info(f"Threads alive: {alive}")
+            time.sleep(60)
+    except KeyboardInterrupt:
+        logger.info("Shutdown requested by user. Exiting...")

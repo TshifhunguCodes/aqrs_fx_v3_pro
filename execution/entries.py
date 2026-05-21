@@ -10,7 +10,9 @@ class EntryExecutor:
         direction,
         volume,
         sl,
-        tp
+        tp,
+        comment="AQRS_FX_PRO",
+        magic=777
     ):
 
         tick = mt5.symbol_info_tick(symbol)
@@ -41,8 +43,8 @@ class EntryExecutor:
             "sl": sl,
             "tp": tp,
             "deviation": 20,
-            "magic": 777,
-            "comment": "AQRS_FX_PRO",
+            "magic": magic,
+            "comment": comment[:31],
             "type_time": mt5.ORDER_TIME_GTC,
         }
 

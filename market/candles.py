@@ -44,13 +44,35 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
     df["macd"] = ema12 - ema26
     df["macd_signal"] = _ema(df["macd"], 9)
     df["macd_hist"] = df["macd"] - df["macd_signal"]
+    df["macd_histogram"] = df["macd_hist"]
+    df["macd_slope"] = df["macd"].diff()
+    df["macd_crossover"] = np.where(
+        (df["macd"] > df["macd_signal"]) & (df["macd"].shift(1) <= df["macd_signal"].shift(1)),
+        "BULLISH",
+        np.where(
+            (df["macd"] < df["macd_signal"]) & (df["macd"].shift(1) >= df["macd_signal"].shift(1)),
+            "BEARISH",
+            "NONE",
+        ),
+    )
+    df["macd_zero_cross"] = np.where(
+        (df["macd"] > 0) & (df["macd"].shift(1) <= 0),
+        "BULLISH",
+        np.where((df["macd"] < 0) & (df["macd"].shift(1) >= 0), "BEARISH", "NONE"),
+    )
 
     bb_mid = df["close"].rolling(20).mean()
     bb_std = df["close"].rolling(20).std()
     df["bb_upper"] = bb_mid + (2 * bb_std)
     df["bb_mid"] = bb_mid
+    df["bb_middle"] = bb_mid
     df["bb_lower"] = bb_mid - (2 * bb_std)
     df["bb_pct"] = (df["close"] - df["bb_lower"]) / (df["bb_upper"] - df["bb_lower"] + 1e-9)
+    df["bb_width"] = (df["bb_upper"] - df["bb_lower"]) / (df["bb_middle"] + 1e-12)
+    df["bb_position"] = df["bb_pct"]
+    df["bb_squeeze"] = df["bb_width"] < df["bb_width"].rolling(50).quantile(0.25)
+    df["bb_touch_upper"] = df["high"] >= df["bb_upper"]
+    df["bb_touch_lower"] = df["low"] <= df["bb_lower"]
 
     up_move = df["high"].diff()
     down_move = -df["low"].diff()
@@ -59,13 +81,23 @@ def add_indicators(df: pd.DataFrame) -> pd.DataFrame:
     atr = df["atr"] + 1e-12
     df["dmp"] = 100 * pd.Series(plus_dm, index=df.index).ewm(alpha=1 / 14, adjust=False).mean() / atr
     df["dmn"] = 100 * pd.Series(minus_dm, index=df.index).ewm(alpha=1 / 14, adjust=False).mean() / atr
+    df["adx_plus_di"] = df["dmp"]
+    df["adx_minus_di"] = df["dmn"]
     dx = 100 * (df["dmp"] - df["dmn"]).abs() / (df["dmp"] + df["dmn"] + 1e-12)
     df["adx"] = dx.ewm(alpha=1 / 14, adjust=False).mean()
+    df["adx_strength"] = np.where(df["adx"] >= 25, "STRONG", np.where(df["adx"] >= 18, "MODERATE", "WEAK"))
+    df["adx_bullish_cross"] = (df["dmp"] > df["dmn"]) & (df["dmp"].shift(1) <= df["dmn"].shift(1))
+    df["adx_bearish_cross"] = (df["dmn"] > df["dmp"]) & (df["dmn"].shift(1) <= df["dmp"].shift(1))
 
     low14 = df["low"].rolling(14).min()
     high14 = df["high"].rolling(14).max()
     df["stoch_k"] = 100 * (df["close"] - low14) / (high14 - low14 + 1e-12)
     df["stoch_d"] = df["stoch_k"].rolling(3).mean()
+    df["stoch_k_slow"] = df["stoch_d"].rolling(3).mean()
+    df["stoch_overbought"] = df["stoch_k"] > 80
+    df["stoch_oversold"] = df["stoch_k"] < 20
+    df["stoch_bullish_cross"] = (df["stoch_k"] > df["stoch_d"]) & (df["stoch_k"].shift(1) <= df["stoch_d"].shift(1))
+    df["stoch_bearish_cross"] = (df["stoch_k"] < df["stoch_d"]) & (df["stoch_k"].shift(1) >= df["stoch_d"].shift(1))
 
     df["momentum"] = df["close"].diff(10)
 
